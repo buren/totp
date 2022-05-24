@@ -58,11 +58,12 @@ const computeOtp = (hashAlg: crypto.Hmac, timeStepNumber: number, modifier?: str
  * Default time-step is 3 minutes.
  * @param {Buffer} token - a secure random token (e.g. a user's security stamp)
  * @param {string=} modifier - reason to create this one-time password
+ * @param {number=3} timeStepMinutes - configure the time-step, default is 3 minutes.
  */
-const generateCode = (token: Buffer, modifier?: string): number => {
+const generateCode = (token: Buffer, modifier?: string, timeStepMinutes: number = 3): number => {
   const hashAlg = crypto.createHmac("sha1", token);
 
-  return computeOtp(hashAlg, getCurrentTimeStepNumber(3), modifier);
+  return computeOtp(hashAlg, getCurrentTimeStepNumber(timeStepMinutes), modifier);
 }
 
 /* Validate the time-based one-time password.
@@ -70,9 +71,10 @@ const generateCode = (token: Buffer, modifier?: string): number => {
  * @param {number} code - code to be validated
  * @param {Buffer} token - token that is used to create one-time password
  * @param {string=} modifier - reason to create this one-time password
+ * @param {number=3} timeStepMinutes - configure the time-step, default is 3 minutes.
  */
-const validateCode = (code: number, token: Buffer, modifier?: string): boolean => {
-  const timeStepNumber = getCurrentTimeStepNumber(3);
+const validateCode = (code: number, token: Buffer, modifier?: string, timeStepMinutes: number = 3): boolean => {
+  const timeStepNumber = getCurrentTimeStepNumber(timeStepMinutes);
 
   for (var i = -2; i <= 2; i++) {
     const hashAlg = crypto.createHmac("sha1", token);

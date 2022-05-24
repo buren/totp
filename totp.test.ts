@@ -82,6 +82,26 @@ describe("validateCode", () => {
         { timeStepMinutes: 2, minutes: 7, expected: false },
         { timeStepMinutes: 2, minutes: 8, expected: false },
         { timeStepMinutes: 2, minutes: 9, expected: false },
+        // timeStepMinutes 1
+        { timeStepMinutes: 1, minutes: -9, expected: false },
+        { timeStepMinutes: 1, minutes: -8, expected: false },
+        { timeStepMinutes: 1, minutes: -7, expected: false },
+        { timeStepMinutes: 1, minutes: -6, expected: false },
+        { timeStepMinutes: 1, minutes: -5, expected: false },
+        { timeStepMinutes: 1, minutes: -4, expected: false },
+        { timeStepMinutes: 1, minutes: -3, expected: false },
+        { timeStepMinutes: 1, minutes: -2, expected: true },
+        { timeStepMinutes: 1, minutes: -1, expected: true },
+        { timeStepMinutes: 1, minutes: 0, expected: true },
+        { timeStepMinutes: 1, minutes: 1, expected: true },
+        { timeStepMinutes: 1, minutes: 2, expected: true },
+        { timeStepMinutes: 1, minutes: 3, expected: false },
+        { timeStepMinutes: 1, minutes: 4, expected: false },
+        { timeStepMinutes: 1, minutes: 5, expected: false },
+        { timeStepMinutes: 1, minutes: 6, expected: false },
+        { timeStepMinutes: 1, minutes: 7, expected: false },
+        { timeStepMinutes: 1, minutes: 8, expected: false },
+        { timeStepMinutes: 1, minutes: 9, expected: false },
     ];
 
     testData.forEach(data => {

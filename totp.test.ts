@@ -99,3 +99,33 @@ describe("validateCode", () => {
         });
     });
 });
+
+describe("TOTP", () => {
+    test("generateCode", () => {
+        const t = new totp.TOTP("soub@WOOL8pow-mol");
+        let code: number = 0;
+        mockNewDate(
+            new Date(mockDateEpoc),
+            () => code = t.generateCode()
+        );
+
+        expect(code).toBe(990874);
+    });
+
+    test("validateCode", () => {
+        const t = new totp.TOTP("soub@WOOL8pow-mol");
+        let code: number = 0;
+        mockNewDate(
+            new Date(mockDateEpoc),
+            () => code = t.generateCode()
+        );
+
+        let isValid: boolean = false;
+        mockNewDate(
+            new Date(mockDateEpoc),
+            () => isValid = t.validateCode(code)
+        );
+
+        expect(isValid).toBe(true);
+    });
+});

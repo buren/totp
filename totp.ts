@@ -87,4 +87,33 @@ const validateCode = (code: number, token: Buffer, modifier?: string, timeStep: 
   return false;
 }
 
-export default { generateCode, validateCode };
+interface TOTPModifier {
+  purpose: string;
+  userId: string;
+}
+
+class TOTP {
+  token: Buffer;
+  timeStep: number;
+
+  private modifierString: string | undefined;
+
+  constructor(secureKey: string, timeStep: number = 3) {
+    this.token = Buffer.from(secureKey, "utf-8");
+    this.timeStep = timeStep;
+  }
+
+  generateCode(): number {
+    return generateCode(this.token, this.modifierString, this.timeStep);
+  }
+
+  validateCode(code: number): boolean {
+    return validateCode(code, this.token, this.modifierString, this.timeStep);
+  }
+
+  set modifier({ purpose, userId }: TOTPModifier) {
+    this.modifierString = `TOTP:${purpose}:${userId}`;
+  }
+}
+
+export default { generateCode, validateCode, TOTP };

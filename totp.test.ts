@@ -41,26 +41,42 @@ describe("generateCode", () => {
 
 describe("validateCode", () => {
     const testData = [
-        { minutes: -9, expected: false },
-        { minutes: -8, expected: true },
-        { minutes: 6, expected: true },
-        { minutes: 7, expected: false },
+        // timeStep 3 min
+        { timeStep: 3, minutes: -9, expected: false },
+        { timeStep: 3, minutes: -8, expected: true },
+        { timeStep: 3, minutes: 6, expected: true },
+        { timeStep: 3, minutes: 7, expected: false },
+        // timeStep 2 min
+        { timeStep: 2, minutes: -5, expected: false },
+        { timeStep: 2, minutes: -4, expected: true },
+        { timeStep: 2, minutes: 5, expected: true },
+        { timeStep: 2, minutes: 6, expected: false },
+        // timeStep 1 min
+        { timeStep: 1, minutes: -3, expected: false },
+        { timeStep: 1, minutes: -2, expected: true },
+        { timeStep: 1, minutes: 2, expected: true },
+        { timeStep: 1, minutes: 3, expected: false },
+        // timeStep 0.1 min
+        { timeStep: 0.1, minutes: -0.3, expected: false },
+        { timeStep: 0.1, minutes: -0.2, expected: true },
+        { timeStep: 0.1, minutes: 0.2, expected: true },
+        { timeStep: 0.1, minutes: 0.3, expected: false },
     ];
 
     testData.forEach(data => {
-        const { minutes, expected } = data;
+        const { timeStep, minutes, expected } = data;
 
         test(`returns ${expected} for valid TOTP code with modifier, minutes delay: ${minutes}`, () => {
             let code: number = 0;
             mockNewDate(
                 new Date(mockDateEpoc),
-                () => code = totp.generateCode(token, modifier)
+                () => code = totp.generateCode(token, modifier, timeStep)
             );
 
             let isValid = false;
             mockNewDate(
                 new Date(mockDateEpoc + minutes * 60 * 1000),
-                () => isValid = totp.validateCode(code, token, modifier)
+                () => isValid = totp.validateCode(code, token, modifier, timeStep)
             );
 
             expect(isValid).toBe(expected);
@@ -70,13 +86,13 @@ describe("validateCode", () => {
             let code: number = 0;
             mockNewDate(
                 new Date(mockDateEpoc),
-                () => code = totp.generateCode(token)
+                () => code = totp.generateCode(token, undefined, timeStep)
             );
 
             let isValid = false;
             mockNewDate(
                 new Date(mockDateEpoc + minutes * 60 * 1000),
-                () => isValid = totp.validateCode(code, token)
+                () => isValid = totp.validateCode(code, token, undefined, timeStep)
             );
 
             expect(isValid).toBe(expected);
